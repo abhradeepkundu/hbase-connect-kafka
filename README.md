@@ -27,7 +27,7 @@ Each kafka producer property should be prefixed with `kafka`.
 name | data type | required | description
 -----|-----------|----------|------------
 kafka.bootstrap.servers | string | yes | Kafka broker servers.
-kafka.producer.type | string | no | Can be either sync or async.
+kafka.producer.type | string | no | Can be either sync or async. Default `sync`
 
 
 ## Packaging
@@ -37,9 +37,9 @@ kafka.producer.type | string | no | Can be either sync or async.
 
 ## Deployment
 
-* Add hbase-cdc-kafka.jar and hbase-site.xml with the required mandatory properties to all the HBase Region servers classpath and restart them.
+* Add hbase-cdc-kafka.jar and hbase-site.xml with the required properties to all the HBase Region servers classpath and restart them.
 
-* At HBase shell, run the following commands. We are creating the table, registering the custom ReplicationEndpoint and inserting few records.
+* At HBase shell, run the following commands.
 
 ```bash
 hbase> create 'test', {NAME => 'd', REPLICATION_SCOPE => '1'}
