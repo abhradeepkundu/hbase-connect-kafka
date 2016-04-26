@@ -83,17 +83,17 @@ public class HbaseEndpoint extends BaseReplicationEndpoint {
             tableEntries.forEach(tblEntry -> {
 	              List<Cell> cells = tblEntry.getEdit().getCells();
 
-	              // group the data by the rowkey.
-                Map<byte[], List<Cell>> columnsByRow = cells.stream()
-                      .collect(groupingBy(CellUtil::cloneRow));
+                // group the data by the rowkey.
+	            Map<byte[], List<Cell>> columnsByRow = cells.stream()
+	                  .collect(groupingBy(CellUtil::cloneRow));
 
 	              // build the list of rows.
-                columnsByRow.entrySet().stream().forEach(rowcols -> {
-                    final byte[] rowkey = rowcols.getKey();
+	            columnsByRow.entrySet().stream().forEach(rowcols -> {
+	                final byte[] rowkey = rowcols.getKey();
 	                  final List<Cell> columns = rowcols.getValue();
-                    final HRow row = TO_HROW.apply(rowkey, columns);
-                    producer.send(tableName, row);
-                });
+	                final HRow row = TO_HROW.apply(rowkey, columns);
+	                producer.send(tableName, row);
+	             });
             });
         });
         return true;
@@ -104,7 +104,7 @@ public class HbaseEndpoint extends BaseReplicationEndpoint {
         LOG.info("Hbase replication to Kafka started at " + LocalDate.now());
         final Configuration hdfsConfig = ctx.getConfiguration();
         final KafkaConfiguration kafkaConfig = new KafkaConfiguration(hdfsConfig);
-	      topicNameFilter = new TopicNameFilter(kafkaConfig);
+	    topicNameFilter = new TopicNameFilter(kafkaConfig);
         producer = KafkaProducerFactory.getInstance(kafkaConfig);
         notifyStarted();
     }
@@ -112,7 +112,7 @@ public class HbaseEndpoint extends BaseReplicationEndpoint {
     @Override
     protected void doStop() {
         LOG.info("Hbase replication to Kafka stopped at " + LocalDate.now());
-	      producer.close();
+	    producer.close();
         notifyStopped();
     }
 }

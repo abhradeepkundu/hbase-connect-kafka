@@ -47,8 +47,8 @@ public final class KafkaMessageProducer implements Closeable {
     private final RetryPolicy retryPolicy = new BackpressureRetryPolicy();
     private final Meter eventsPerSec = Metrics.newMeter(OVERALL_SEND_RATE, "events", TimeUnit.SECONDS);
     private final Counter failures = Metrics.newCounter(SEND_FAILURES);
-	  private final boolean isAsync;
-	  private final Callback callbackHandler;
+	private final boolean isAsync;
+	private final Callback callbackHandler;
 
 
 	/**
@@ -86,7 +86,7 @@ public final class KafkaMessageProducer implements Closeable {
             try {
                 this.kafkaProducer.send(record, callbackHandler);
                 eventsPerSec.mark(1);
-	              break;
+	            break;
             } catch (RuntimeException e) {
                 retry = retryPolicy.shouldRetry(e);
             } catch (Exception ex) {
@@ -107,7 +107,7 @@ public final class KafkaMessageProducer implements Closeable {
         while(retry) {
             try {
                 final RecordMetadata metadata = this.kafkaProducer.send(record).get();
-	              eventsPerSec.mark(1);
+	            eventsPerSec.mark(1);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(String.format(" published message to topic [%s] , partition [%s] and the next offset is [%s]",
                       metadata.topic(), metadata.partition(), metadata.offset()));
