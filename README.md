@@ -1,6 +1,6 @@
-# hbase-cdc-kafka
+# hbase-connect-kafka
 
-Change data capture of HBase tables to Kafka
+Publish changes of HBase tables to Kafka . 
 
 ## Pre-requisites
 
