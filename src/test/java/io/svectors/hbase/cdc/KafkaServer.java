@@ -19,7 +19,9 @@ package io.svectors.hbase.cdc;
 
 import com.google.common.base.Preconditions;
 import kafka.server.KafkaConfig;
-import kafka.server.KafkaServerStartable;
+import org.apache.kafka.common.utils.Time;
+import scala.Option;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
@@ -32,7 +34,7 @@ public class KafkaServer {
 
     private final int brokerPort;  // kafka broker port
 	  private final int zookeeperPort; // zookeeper port
-		private final KafkaServerStartable kafka;
+		private final kafka.server.KafkaServer kafka;
 		private final File logDir;
 
     private final Function<Integer,String> TO_LOCAL_URI = (port) -> "localhost:"+ port;
@@ -46,7 +48,7 @@ public class KafkaServer {
 	          this.logDir = new File(System.getProperty("java.io.tmpdir"), "kafka/logs/hbase-cdc-kafka-" + brokerPort);
 
 	          KafkaConfig config = buildKafkaConfig(zookeeperPort);
-            kafka = new KafkaServerStartable(config);
+            kafka = new kafka.server.KafkaServer(config, Time.SYSTEM, Option.apply("kafke_test"), false);
             kafka.startup();
         } catch (Exception ex) {
             throw new RuntimeException("Could not start test broker", ex);

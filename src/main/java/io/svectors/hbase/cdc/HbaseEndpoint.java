@@ -70,33 +70,53 @@ public class HbaseEndpoint extends BaseReplicationEndpoint {
     @Override
     public boolean replicate(ReplicateContext context) {
         final List<Entry> entries = context.getEntries();
+        LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Inside REPLICATE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        LOG.info("Received the data of length {}", entries.size());
 
         final Map<String, List<Entry>> entriesByTable = entries.stream()
-                          .filter(entry -> topicNameFilter.test(entry.getKey().getTablename().getNameAsString()))
-                          .collect(groupingBy(entry -> entry.getKey().getTablename().getNameAsString()));
+                          .filter(entry -> topicNameFilter.test(entry.getKey().getTableName().getNameAsString()))
+                          .collect(groupingBy(entry -> entry.getKey().getTableName().getNameAsString()));
 
         // persist the data to kafka in parallel.
+//        entriesByTable.entrySet().stream().forEach(entry -> {
+//            final String tableName = entry.getKey();
+//            final List<Entry> tableEntries = entry.getValue();
+//
+//            tableEntries.forEach(tblEntry -> {
+//	              List<Cell> cells = tblEntry.getEdit().getCells();
+//
+//                // group the data by the rowkey.
+//	            Map<byte[], List<Cell>> columnsByRow = cells.stream()
+//	                  .collect(groupingBy(CellUtil::cloneRow));
+//
+//	              // build the list of rows.
+//	            columnsByRow.entrySet().stream().forEach(rowcols -> {
+//	                final byte[] rowkey = rowcols.getKey();
+//	                  final List<Cell> columns = rowcols.getValue();
+//	                final HRow row = TO_HROW.apply(rowkey, columns);
+//                    LOG.info("Sending data from HBaseEndpoint to Kafka>>>> rowkey >> {}", row.getRowKey());
+//	                producer.send(tableName, row);
+//	             });
+//            });
+//        });
         entriesByTable.entrySet().stream().forEach(entry -> {
             final String tableName = entry.getKey();
             final List<Entry> tableEntries = entry.getValue();
-
             tableEntries.forEach(tblEntry -> {
-	              List<Cell> cells = tblEntry.getEdit().getCells();
-
-                // group the data by the rowkey.
-	            Map<byte[], List<Cell>> columnsByRow = cells.stream()
-	                  .collect(groupingBy(CellUtil::cloneRow));
-
-	              // build the list of rows.
-	            columnsByRow.entrySet().stream().forEach(rowcols -> {
-	                final byte[] rowkey = rowcols.getKey();
-	                  final List<Cell> columns = rowcols.getValue();
-	                final HRow row = TO_HROW.apply(rowkey, columns);
-	                producer.send(tableName, row);
-	             });
+                producer.send(tableName, tblEntry);
             });
         });
         return true;
+    }
+
+    @Override
+    public void start() {
+        startAsync();
+    }
+
+    @Override
+    public void stop() {
+        stopAsync();
     }
 
     @Override

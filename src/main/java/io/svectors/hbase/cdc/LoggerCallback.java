@@ -17,14 +17,14 @@
  */
 package io.svectors.hbase.cdc;
 
-import com.yammer.metrics.Metrics;
-import com.yammer.metrics.core.Counter;
+//import com.yammer.metrics.Metrics;
+//import com.yammer.metrics.core.Counter;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.svectors.hbase.cdc.metrics.MetricRegistry.Kafka.ASYNC_SEND_FAILURES;
+//import static io.svectors.hbase.cdc.metrics.MetricRegistry.Kafka.ASYNC_SEND_FAILURES;
 
 /**
  * @author ravi.magham
@@ -32,12 +32,12 @@ import static io.svectors.hbase.cdc.metrics.MetricRegistry.Kafka.ASYNC_SEND_FAIL
 public class LoggerCallback implements Callback {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LoggerCallback.class);
-	private final Counter asyncFailures = Metrics.newCounter(ASYNC_SEND_FAILURES);
+	//private final Counter asyncFailures = Metrics.newCounter(ASYNC_SEND_FAILURES);
 
 	@Override
 	public void onCompletion(RecordMetadata recordMetadata, Exception e) {
 			if (e != null) {
-					asyncFailures.inc();
+					//asyncFailures.inc();
 					LOG.error(String.format("Exception [%s] producing to topic ", e.getMessage()));
 			} else {
 					LOG.info(String.format(" the topic [%s] offset is [%s] ", recordMetadata.topic(), recordMetadata.offset()));

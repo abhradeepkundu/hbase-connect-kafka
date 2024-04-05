@@ -18,14 +18,13 @@
 package io.svectors.hbase.cdc;
 
 import com.google.common.base.Throwables;
-import com.yammer.metrics.Metrics;
-import com.yammer.metrics.core.Counter;
-import kafka.common.QueueFullException;
+//import com.yammer.metrics.Metrics;
+//import com.yammer.metrics.core.Counter;
 import org.apache.kafka.clients.producer.BufferExhaustedException;
 
 import java.time.Duration;
 
-import static io.svectors.hbase.cdc.metrics.MetricRegistry.Kafka.SEND_RETRIES;
+//import static io.svectors.hbase.cdc.metrics.MetricRegistry.Kafka.SEND_RETRIES;
 
 /**
  * @author ravi.magham
@@ -33,17 +32,16 @@ import static io.svectors.hbase.cdc.metrics.MetricRegistry.Kafka.SEND_RETRIES;
 public class BackpressureRetryPolicy implements RetryPolicy {
 
 	private final Duration retryInterval = Duration.ofMillis(1000);
-	protected final Counter retries = Metrics.newCounter(SEND_RETRIES);
+	//protected final Counter retries = Metrics.newCounter(SEND_RETRIES);
 
 
 	@Override
 	public boolean shouldRetry(RuntimeException e) {
-		if(e instanceof BufferExhaustedException ||
-			 e instanceof QueueFullException) {
+		if(e instanceof BufferExhaustedException) {
 			// kind of applying back pressure as we make the current thread to sleep.
 			try {
 				Thread.sleep(retryInterval.toMillis());
-				retries.inc();
+				//retries.inc();
 			} catch (InterruptedException ex) {
 				throw Throwables.propagate(ex);
 			}

@@ -53,7 +53,7 @@ public abstract class BaseTest {
 		hbaseConf.setInt("replication.stats.thread.period.seconds", 5);
         hbaseConf.setLong("replication.sleep.before.failover", 2000);
         hbaseConf.setInt("replication.source.maxretriesmultiplier", 10);
-        hbaseConf.setBoolean(HConstants.REPLICATION_ENABLE_KEY, true);
+//        hbaseConf.setBoolean(HConstants.REPLICATION_ENABLE_KEY, true);
 
         // add kafka properties. we prefix each property with kafka
 		addKafkaProperties(hbaseConf);

@@ -8,9 +8,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<hbase.version>1.2.0</hbase.version>
-		<hadoop.version>2.6.0</hadoop.version>
-		<kafka.version>0.9.0.0</kafka.version>
+		<hbase.version>2.4.6</hbase.version>
+<!--		<hadoop.version>3.0.0</hadoop.version>-->
+		<kafka.version>3.4.0</kafka.version>
 		<junit.version>4.11</junit.version>
 		<hadoop.mvn.version>2.7.1</hadoop.mvn.version>
 		<protobuf.version>2.5.0</protobuf.version>
@@ -31,13 +31,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
+			<artifactId>kafka_2.12</artifactId>
 			<version>${kafka.version}</version>
 			<classifier>test</classifier>
 		</dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.10</artifactId>
+            <artifactId>kafka_2.12</artifactId>
             <version>${kafka.version}</version>
         </dependency>
 		<dependency>
@@ -56,6 +56,18 @@
 			<artifactId>hbase-testing-util</artifactId>
 			<version>${hbase.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.36</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.36</version>
+			<scope>provided</scope>
 		</dependency>
   	</dependencies>
 
